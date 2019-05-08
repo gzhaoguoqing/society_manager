@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sm.dao.PostMapper">
+  <resultMap id="BaseResultMap" type="com.sm.po.Post">
+    <id column="id_" jdbcType="VARCHAR" property="id" />
+    <result column="content_" jdbcType="VARCHAR" property="content" />
+    <result column="date_" jdbcType="TIMESTAMP" property="date" />
+    <result column="author_id_" jdbcType="VARCHAR" property="authorId" />
+    <result column="topic_ids_" jdbcType="VARCHAR" property="topicIds" />
+    <result column="img_paths_" jdbcType="VARCHAR" property="imgPaths" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id_, content_, date_, author_id_, topic_ids_, img_paths_
+  </sql>
+  <select id="selectByExample" parameterType="com.sm.client.PostExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from post
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from post
+    where id_ = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from post
+    where id_ = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.sm.client.PostExample">
+    delete from post
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.sm.po.Post">
+    insert into post (id_, content_, date_, 
+      author_id_, topic_ids_, img_paths_
+      )
+    values (#{id,jdbcType=VARCHAR}, #{content,jdbcType=VARCHAR}, #{date,jdbcType=TIMESTAMP}, 
+      #{authorId,jdbcType=VARCHAR}, #{topicIds,jdbcType=VARCHAR}, #{imgPaths,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.sm.po.Post">
+    insert into post
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id_,
+      </if>
+      <if test="content != null">
+        content_,
+      </if>
+      <if test="date != null">
+        date_,
+      </if>
+      <if test="authorId != null">
+        author_id_,
+      </if>
+      <if test="topicIds != null">
+        topic_ids_,
+      </if>
+      <if test="imgPaths != null">
+        img_paths_,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null">
+        #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="date != null">
+        #{date,jdbcType=TIMESTAMP},
+      </if>
+      <if test="authorId != null">
+        #{authorId,jdbcType=VARCHAR},
+      </if>
+      <if test="topicIds != null">
+        #{topicIds,jdbcType=VARCHAR},
+      </if>
+      <if test="imgPaths != null">
+        #{imgPaths,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.sm.client.PostExample" resultType="java.lang.Long">
+    select count(*) from post
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update post
+    <set>
+      <if test="record.id != null">
+        id_ = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.content != null">
+        content_ = #{record.content,jdbcType=VARCHAR},
+      </if>
+      <if test="record.date != null">
+        date_ = #{record.date,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.authorId != null">
+        author_id_ = #{record.authorId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.topicIds != null">
+        topic_ids_ = #{record.topicIds,jdbcType=VARCHAR},
+      </if>
+      <if test="record.imgPaths != null">
+        img_paths_ = #{record.imgPaths,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update post
+    set id_ = #{record.id,jdbcType=VARCHAR},
+      content_ = #{record.content,jdbcType=VARCHAR},
+      date_ = #{record.date,jdbcType=TIMESTAMP},
+      author_id_ = #{record.authorId,jdbcType=VARCHAR},
+      topic_ids_ = #{record.topicIds,jdbcType=VARCHAR},
+      img_paths_ = #{record.imgPaths,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.sm.po.Post">
+    update post
+    <set>
+      <if test="content != null">
+        content_ = #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="date != null">
+        date_ = #{date,jdbcType=TIMESTAMP},
+      </if>
+      <if test="authorId != null">
+        author_id_ = #{authorId,jdbcType=VARCHAR},
+      </if>
+      <if test="topicIds != null">
+        topic_ids_ = #{topicIds,jdbcType=VARCHAR},
+      </if>
+      <if test="imgPaths != null">
+        img_paths_ = #{imgPaths,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id_ = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.sm.po.Post">
+    update post
+    set content_ = #{content,jdbcType=VARCHAR},
+      date_ = #{date,jdbcType=TIMESTAMP},
+      author_id_ = #{authorId,jdbcType=VARCHAR},
+      topic_ids_ = #{topicIds,jdbcType=VARCHAR},
+      img_paths_ = #{imgPaths,jdbcType=VARCHAR}
+    where id_ = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

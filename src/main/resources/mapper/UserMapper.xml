@@ -1,0 +1,323 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sm.dao.UserMapper">
+  <resultMap id="BaseResultMap" type="com.sm.po.User">
+    <id column="id_" jdbcType="VARCHAR" property="id" />
+    <result column="number_" jdbcType="VARCHAR" property="number" />
+    <result column="name_" jdbcType="VARCHAR" property="name" />
+    <result column="sex_" jdbcType="INTEGER" property="sex" />
+    <result column="classes_" jdbcType="VARCHAR" property="classes" />
+    <result column="contact_way_" jdbcType="VARCHAR" property="contactWay" />
+    <result column="role_id_" jdbcType="VARCHAR" property="roleId" />
+    <result column="password_" jdbcType="VARCHAR" property="password" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.sm.po.User">
+    <result column="association_ids_" jdbcType="LONGVARCHAR" property="associationIds" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id_, number_, name_, sex_, classes_, contact_way_, role_id_, password_
+  </sql>
+  <sql id="Blob_Column_List">
+    association_ids_
+  </sql>
+  <select id="selectByExampleWithBLOBs" parameterType="com.sm.client.UserExample" resultMap="ResultMapWithBLOBs">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from user
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByExample" parameterType="com.sm.client.UserExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from user
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from user
+    where id_ = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from user
+    where id_ = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.sm.client.UserExample">
+    delete from user
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.sm.po.User">
+    insert into user (id_, number_, name_, 
+      sex_, classes_, contact_way_, 
+      role_id_, password_, association_ids_
+      )
+    values (#{id,jdbcType=VARCHAR}, #{number,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
+      #{sex,jdbcType=INTEGER}, #{classes,jdbcType=VARCHAR}, #{contactWay,jdbcType=VARCHAR}, 
+      #{roleId,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, #{associationIds,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.sm.po.User">
+    insert into user
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id_,
+      </if>
+      <if test="number != null">
+        number_,
+      </if>
+      <if test="name != null">
+        name_,
+      </if>
+      <if test="sex != null">
+        sex_,
+      </if>
+      <if test="classes != null">
+        classes_,
+      </if>
+      <if test="contactWay != null">
+        contact_way_,
+      </if>
+      <if test="roleId != null">
+        role_id_,
+      </if>
+      <if test="password != null">
+        password_,
+      </if>
+      <if test="associationIds != null">
+        association_ids_,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="number != null">
+        #{number,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null">
+        #{sex,jdbcType=INTEGER},
+      </if>
+      <if test="classes != null">
+        #{classes,jdbcType=VARCHAR},
+      </if>
+      <if test="contactWay != null">
+        #{contactWay,jdbcType=VARCHAR},
+      </if>
+      <if test="roleId != null">
+        #{roleId,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null">
+        #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="associationIds != null">
+        #{associationIds,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.sm.client.UserExample" resultType="java.lang.Long">
+    select count(*) from user
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update user
+    <set>
+      <if test="record.id != null">
+        id_ = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.number != null">
+        number_ = #{record.number,jdbcType=VARCHAR},
+      </if>
+      <if test="record.name != null">
+        name_ = #{record.name,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sex != null">
+        sex_ = #{record.sex,jdbcType=INTEGER},
+      </if>
+      <if test="record.classes != null">
+        classes_ = #{record.classes,jdbcType=VARCHAR},
+      </if>
+      <if test="record.contactWay != null">
+        contact_way_ = #{record.contactWay,jdbcType=VARCHAR},
+      </if>
+      <if test="record.roleId != null">
+        role_id_ = #{record.roleId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.password != null">
+        password_ = #{record.password,jdbcType=VARCHAR},
+      </if>
+      <if test="record.associationIds != null">
+        association_ids_ = #{record.associationIds,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExampleWithBLOBs" parameterType="map">
+    update user
+    set id_ = #{record.id,jdbcType=VARCHAR},
+      number_ = #{record.number,jdbcType=VARCHAR},
+      name_ = #{record.name,jdbcType=VARCHAR},
+      sex_ = #{record.sex,jdbcType=INTEGER},
+      classes_ = #{record.classes,jdbcType=VARCHAR},
+      contact_way_ = #{record.contactWay,jdbcType=VARCHAR},
+      role_id_ = #{record.roleId,jdbcType=VARCHAR},
+      password_ = #{record.password,jdbcType=VARCHAR},
+      association_ids_ = #{record.associationIds,jdbcType=LONGVARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update user
+    set id_ = #{record.id,jdbcType=VARCHAR},
+      number_ = #{record.number,jdbcType=VARCHAR},
+      name_ = #{record.name,jdbcType=VARCHAR},
+      sex_ = #{record.sex,jdbcType=INTEGER},
+      classes_ = #{record.classes,jdbcType=VARCHAR},
+      contact_way_ = #{record.contactWay,jdbcType=VARCHAR},
+      role_id_ = #{record.roleId,jdbcType=VARCHAR},
+      password_ = #{record.password,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.sm.po.User">
+    update user
+    <set>
+      <if test="number != null">
+        number_ = #{number,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        name_ = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null">
+        sex_ = #{sex,jdbcType=INTEGER},
+      </if>
+      <if test="classes != null">
+        classes_ = #{classes,jdbcType=VARCHAR},
+      </if>
+      <if test="contactWay != null">
+        contact_way_ = #{contactWay,jdbcType=VARCHAR},
+      </if>
+      <if test="roleId != null">
+        role_id_ = #{roleId,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null">
+        password_ = #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="associationIds != null">
+        association_ids_ = #{associationIds,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id_ = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.sm.po.User">
+    update user
+    set number_ = #{number,jdbcType=VARCHAR},
+      name_ = #{name,jdbcType=VARCHAR},
+      sex_ = #{sex,jdbcType=INTEGER},
+      classes_ = #{classes,jdbcType=VARCHAR},
+      contact_way_ = #{contactWay,jdbcType=VARCHAR},
+      role_id_ = #{roleId,jdbcType=VARCHAR},
+      password_ = #{password,jdbcType=VARCHAR},
+      association_ids_ = #{associationIds,jdbcType=LONGVARCHAR}
+    where id_ = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.sm.po.User">
+    update user
+    set number_ = #{number,jdbcType=VARCHAR},
+      name_ = #{name,jdbcType=VARCHAR},
+      sex_ = #{sex,jdbcType=INTEGER},
+      classes_ = #{classes,jdbcType=VARCHAR},
+      contact_way_ = #{contactWay,jdbcType=VARCHAR},
+      role_id_ = #{roleId,jdbcType=VARCHAR},
+      password_ = #{password,jdbcType=VARCHAR}
+    where id_ = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

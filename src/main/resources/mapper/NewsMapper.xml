@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sm.dao.NewsMapper">
+  <resultMap id="BaseResultMap" type="com.sm.po.News">
+    <id column="id_" jdbcType="VARCHAR" property="id" />
+    <result column="title_" jdbcType="VARCHAR" property="title" />
+    <result column="content_" jdbcType="VARCHAR" property="content" />
+    <result column="date_" jdbcType="TIMESTAMP" property="date" />
+    <result column="author_id_" jdbcType="VARCHAR" property="authorId" />
+    <result column="clicks_" jdbcType="INTEGER" property="clicks" />
+    <result column="important_" jdbcType="INTEGER" property="important" />
+    <result column="important_img_path_" jdbcType="VARCHAR" property="importantImgPath" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id_, title_, content_, date_, author_id_, clicks_, important_, important_img_path_
+  </sql>
+  <select id="selectByExample" parameterType="com.sm.client.NewsExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from news
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from news
+    where id_ = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from news
+    where id_ = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.sm.client.NewsExample">
+    delete from news
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.sm.po.News">
+    insert into news (id_, title_, content_, 
+      date_, author_id_, clicks_, 
+      important_, important_img_path_)
+    values (#{id,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR}, #{content,jdbcType=VARCHAR}, 
+      #{date,jdbcType=TIMESTAMP}, #{authorId,jdbcType=VARCHAR}, #{clicks,jdbcType=INTEGER}, 
+      #{important,jdbcType=INTEGER}, #{importantImgPath,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.sm.po.News">
+    insert into news
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id_,
+      </if>
+      <if test="title != null">
+        title_,
+      </if>
+      <if test="content != null">
+        content_,
+      </if>
+      <if test="date != null">
+        date_,
+      </if>
+      <if test="authorId != null">
+        author_id_,
+      </if>
+      <if test="clicks != null">
+        clicks_,
+      </if>
+      <if test="important != null">
+        important_,
+      </if>
+      <if test="importantImgPath != null">
+        important_img_path_,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="title != null">
+        #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null">
+        #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="date != null">
+        #{date,jdbcType=TIMESTAMP},
+      </if>
+      <if test="authorId != null">
+        #{authorId,jdbcType=VARCHAR},
+      </if>
+      <if test="clicks != null">
+        #{clicks,jdbcType=INTEGER},
+      </if>
+      <if test="important != null">
+        #{important,jdbcType=INTEGER},
+      </if>
+      <if test="importantImgPath != null">
+        #{importantImgPath,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.sm.client.NewsExample" resultType="java.lang.Long">
+    select count(*) from news
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update news
+    <set>
+      <if test="record.id != null">
+        id_ = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.title != null">
+        title_ = #{record.title,jdbcType=VARCHAR},
+      </if>
+      <if test="record.content != null">
+        content_ = #{record.content,jdbcType=VARCHAR},
+      </if>
+      <if test="record.date != null">
+        date_ = #{record.date,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.authorId != null">
+        author_id_ = #{record.authorId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.clicks != null">
+        clicks_ = #{record.clicks,jdbcType=INTEGER},
+      </if>
+      <if test="record.important != null">
+        important_ = #{record.important,jdbcType=INTEGER},
+      </if>
+      <if test="record.importantImgPath != null">
+        important_img_path_ = #{record.importantImgPath,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update news
+    set id_ = #{record.id,jdbcType=VARCHAR},
+      title_ = #{record.title,jdbcType=VARCHAR},
+      content_ = #{record.content,jdbcType=VARCHAR},
+      date_ = #{record.date,jdbcType=TIMESTAMP},
+      author_id_ = #{record.authorId,jdbcType=VARCHAR},
+      clicks_ = #{record.clicks,jdbcType=INTEGER},
+      important_ = #{record.important,jdbcType=INTEGER},
+      important_img_path_ = #{record.importantImgPath,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.sm.po.News">
+    update news
+    <set>
+      <if test="title != null">
+        title_ = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null">
+        content_ = #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="date != null">
+        date_ = #{date,jdbcType=TIMESTAMP},
+      </if>
+      <if test="authorId != null">
+        author_id_ = #{authorId,jdbcType=VARCHAR},
+      </if>
+      <if test="clicks != null">
+        clicks_ = #{clicks,jdbcType=INTEGER},
+      </if>
+      <if test="important != null">
+        important_ = #{important,jdbcType=INTEGER},
+      </if>
+      <if test="importantImgPath != null">
+        important_img_path_ = #{importantImgPath,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id_ = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.sm.po.News">
+    update news
+    set title_ = #{title,jdbcType=VARCHAR},
+      content_ = #{content,jdbcType=VARCHAR},
+      date_ = #{date,jdbcType=TIMESTAMP},
+      author_id_ = #{authorId,jdbcType=VARCHAR},
+      clicks_ = #{clicks,jdbcType=INTEGER},
+      important_ = #{important,jdbcType=INTEGER},
+      important_img_path_ = #{importantImgPath,jdbcType=VARCHAR}
+    where id_ = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>
