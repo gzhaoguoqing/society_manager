@@ -1,11 +1,9 @@
-package com.sm.shiro;
+package com.sm.realm;
 
 import com.sm.bo.PermissionBO;
-import com.sm.bo.RoleBO;
 import com.sm.bo.UserBO;
 import com.sm.service.UserService;
 import org.apache.shiro.authc.*;
-import org.apache.shiro.authz.AuthorizationException;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;

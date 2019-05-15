@@ -1,9 +1,6 @@
 package com.sm.config;
 
-import com.sm.filter.AuthFilter;
-import com.sm.filter.FormAuthFilter;
-import com.sm.filter.PermFilter;
-import com.sm.shiro.CustomRealm;
+import com.sm.realm.CustomRealm;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.realm.Realm;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
@@ -11,7 +8,6 @@ import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreato
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import javax.servlet.Filter;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -30,8 +26,6 @@ public class ShiroConfig {
 //        filtersMap.put("permFilter", new PermFilter());
 
         Map<String, String> filterChainDefinitionMap = new LinkedHashMap<>();
-        filterChainDefinitionMap.put("/api/login", "anon");
-        filterChainDefinitionMap.put("/api/**", "authc");
         filterChainDefinitionMap.put("/**", "anon");
         bean.setFilterChainDefinitionMap(filterChainDefinitionMap);
         return bean;

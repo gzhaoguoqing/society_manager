@@ -13,7 +13,9 @@ public interface InfoService {
 
     public void updateById(Info info);
 
-    public InfoBO getById(String id);
+    public InfoBO getById(String id, boolean isContainCharity);
 
     public List<InfoBO> getByPage(QueryEntry qry);
+
+    public long getCount();
 }

@@ -1,8 +1,10 @@
 package com.sm.bo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.sm.po.News;
+import com.sm.po.User;
+import com.sm.service.UserService;
 import org.springframework.beans.BeanUtils;
-import org.springframework.stereotype.Component;
 
 import java.util.Date;
 
@@ -13,9 +15,10 @@ public class NewsBO {
 
     private String content;
 
+    @JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd HH:mm:ss")
     private Date date;
 
-    private String authorId;
+    private UserBO author;
 
     private Integer clicks;
 
@@ -27,8 +30,8 @@ public class NewsBO {
 
     }
 
-    public NewsBO(News news) {
-        parse(news);
+    public NewsBO(News news, UserService userService) {
+        parse(news, userService);
     }
 
     public String getId() {
@@ -63,12 +66,12 @@ public class NewsBO {
         this.date = date;
     }
 
-    public String getAuthorId() {
-        return authorId;
+    public UserBO getAuthor() {
+        return author;
     }
 
-    public void setAuthorId(String authorId) {
-        this.authorId = authorId == null ? null : authorId.trim();
+    public void setAuthor(UserBO author) {
+        this.author = author;
     }
 
     public Integer getClicks() {
@@ -95,10 +98,11 @@ public class NewsBO {
         this.importantImgPath = importantImgPath == null ? null : importantImgPath.trim();
     }
 
-    public void parse(News news) {
+    public void parse(News news, UserService userService) {
         if (news == null) {
             return;
         }
         BeanUtils.copyProperties(news, this);
+        this.author = userService.getById(news.getAuthorId());
     }
 }

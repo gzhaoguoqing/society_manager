@@ -18,8 +18,8 @@ public class InfoBO {
 
     }
 
-    public InfoBO(Info info, UserService userService) {
-        parse(info, userService);
+    public InfoBO(Info info, UserService userService, boolean isContainCharity) {
+        parse(info, userService, isContainCharity);
     }
 
     public String getId() {
@@ -54,12 +54,14 @@ public class InfoBO {
         this.charity = charity;
     }
 
-    public void parse(Info info, UserService userService) {
+    public void parse(Info info, UserService userService, boolean isContainCharity) {
         if (info == null) {
             return;
         }
         BeanUtils.copyProperties(info, this);
-        UserBO charity = userService.getById(info.getCharityId());
-        this.charity = charity;
+        if (isContainCharity) {
+            UserBO charity = userService.getById(info.getCharityId());
+            this.charity = charity;
+        }
     }
 }

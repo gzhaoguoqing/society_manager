@@ -1,23 +1,14 @@
 package com.sm.bo;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.sm.po.Info;
 import com.sm.po.User;
 import com.sm.service.InfoService;
 import com.sm.service.RoleService;
-import com.sm.service.impl.InfoServiceImpl;
-import com.sm.service.impl.RoleServiceImpl;
-import com.sm.util.Utils;
+import com.sm.util.StringUtils;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
 
-import javax.annotation.Resource;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 public class UserBO {
     private String id;
@@ -37,7 +28,7 @@ public class UserBO {
     @JsonIgnore
     private String password;
 
-    private List<InfoBO> associationIds = new ArrayList<>();
+    private List<InfoBO> associations = new ArrayList<>();
 
     public UserBO() {
 
@@ -111,8 +102,8 @@ public class UserBO {
         this.password = password == null ? null : password.trim();
     }
 
-    public List<InfoBO> getAssociationIds() {
-        return associationIds;
+    public List<InfoBO> getAssociations() {
+        return associations;
     }
 
 
@@ -122,18 +113,18 @@ public class UserBO {
         }
         BeanUtils.copyProperties(user, this);
         String associationIds = user.getAssociationIds();
-        if (Utils.isNotBlank(associationIds)) {
+        if (StringUtils.isNotBlank(associationIds)) {
             String[] split = associationIds.split(",");
-            List<InfoBO> infoBOList = this.getAssociationIds();
+            List<InfoBO> infoBOList = this.getAssociations();
             for (String str : split) {
-                InfoBO infoBO = infoService.getById(str);
+                InfoBO infoBO = infoService.getById(str, false);
                 if (infoBO != null) {
                     infoBOList.add(infoBO);
                 }
             }
         }
         String roleId = user.getRoleId();
-        if (Utils.isNotBlank(roleId)) {
+        if (StringUtils.isNotBlank(roleId)) {
             RoleBO role = roleService.getById(roleId);
             this.setRole(role);
         }

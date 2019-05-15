@@ -16,4 +16,6 @@ public interface NewsService {
     public NewsBO getById(String id);
 
     public List<NewsBO> getByPage(QueryEntry qry);
+
+    public long getCount();
 }

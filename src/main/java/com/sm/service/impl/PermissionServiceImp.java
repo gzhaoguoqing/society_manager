@@ -10,7 +10,6 @@ import com.sm.vo.QueryEntry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,7 +42,9 @@ public class PermissionServiceImp implements PermissionService {
 
     @Override
     public List<PermissionBO> getByPage(QueryEntry qry) {
-        PageHelper.startPage(qry.getPage(), qry.getSize());
+        if (qry != null) {
+            PageHelper.startPage(qry.getPage(), qry.getSize());
+        }
         List<Permission> permissions = permissionMapper.selectByExample(null);
         List<PermissionBO> permissionBOs = new ArrayList<>();
         for (Permission permission : permissions) {

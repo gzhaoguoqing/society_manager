@@ -18,4 +18,6 @@ public interface UserService {
     public UserBO getByNumber(String number);
 
     public List<UserBO> getByPage(QueryEntry qry, String infoId);
+
+    public long getCount(String infoId);
 }

@@ -2,6 +2,7 @@ package com.sm.controller;
 
 import com.sm.bo.UserBO;
 import com.sm.service.UserService;
+import com.sm.util.Utils;
 import com.sm.vo.ResultEntry;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
@@ -19,7 +20,7 @@ public class LoginController {
     @PostMapping("/login")
     public ResultEntry<UserBO> login(String number, String password) {
         ResultEntry<UserBO> result = new ResultEntry<>();
-        UsernamePasswordToken token = new UsernamePasswordToken(number, password);
+        UsernamePasswordToken token = new UsernamePasswordToken(number, Utils.md5(password));
         try {
             SecurityUtils.getSubject().login(token);
             result.setData((UserBO) SecurityUtils.getSubject().getPrincipal());

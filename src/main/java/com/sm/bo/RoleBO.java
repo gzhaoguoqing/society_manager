@@ -1,18 +1,11 @@
 package com.sm.bo;
 
-import com.sm.po.Permission;
 import com.sm.po.Role;
 import com.sm.service.PermissionService;
-import com.sm.service.impl.PermissionServiceImp;
-import com.sm.util.Utils;
-import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import com.sm.util.StringUtils;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class RoleBO {
     private String id;
@@ -56,7 +49,7 @@ public class RoleBO {
         this.setId(role.getId());
         this.setName(getRoleChineseName(role.getName()));
         String permissionIds = role.getPermissionIds();
-        if (Utils.isNotBlank(permissionIds)) {
+        if (StringUtils.isNotBlank(permissionIds)) {
             String[] split = permissionIds.split(",");
             List<PermissionBO> permissionBOs = this.getPermissions();
             for (String str : split) {

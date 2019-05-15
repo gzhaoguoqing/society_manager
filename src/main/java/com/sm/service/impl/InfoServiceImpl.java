@@ -40,18 +40,25 @@ public class InfoServiceImpl implements InfoService {
     }
 
     @Override
-    public InfoBO getById(String id) {
-        return new InfoBO(infoMapper.selectByPrimaryKey(id), userService);
+    public InfoBO getById(String id, boolean isContainCharity) {
+        return new InfoBO(infoMapper.selectByPrimaryKey(id), userService, isContainCharity);
     }
 
     @Override
     public List<InfoBO> getByPage(QueryEntry qry) {
-        PageHelper.startPage(qry.getPage(), qry.getSize());
+        if (qry != null) {
+            PageHelper.startPage(qry.getPage(), qry.getSize());
+        }
         List<Info> infos = infoMapper.selectByExample(null);
         List<InfoBO> infoBOs = new ArrayList<>();
         for (Info info : infos) {
-            infoBOs.add(new InfoBO(info, userService));
+            infoBOs.add(new InfoBO(info, userService, true));
         }
         return infoBOs;
+    }
+
+    @Override
+    public long getCount() {
+        return infoMapper.countByExample(null);
     }
 }

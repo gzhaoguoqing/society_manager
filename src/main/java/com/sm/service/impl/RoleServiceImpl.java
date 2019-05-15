@@ -11,7 +11,6 @@ import com.sm.vo.QueryEntry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,7 +46,9 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public List<RoleBO> getByPage(QueryEntry qry) {
-        PageHelper.startPage(qry.getPage(), qry.getSize());
+        if (qry != null) {
+            PageHelper.startPage(qry.getPage(), qry.getSize());
+        }
         List<Role> roles = roleMapper.selectByExample(null);
         List<RoleBO> roleBOs = new ArrayList<>();
         for (Role role : roles) {

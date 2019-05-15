@@ -16,6 +16,7 @@ public class ResultEntry<T> {
     private int code = SUCCESSFUL;
     private String msg;
     private T data;
+    private long total = 0;
 
     public int getCode() {
         return code;
@@ -39,5 +40,13 @@ public class ResultEntry<T> {
 
     public void setData(T data) {
         this.data = data;
+    }
+
+    public long getTotal() {
+        return total;
+    }
+
+    public void setTotal(long total) {
+        this.total = total;
     }
 }

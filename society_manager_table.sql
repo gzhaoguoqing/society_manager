@@ -28,11 +28,11 @@ CREATE TABLE user (
   classes_ VARCHAR(20),
   contact_way_ VARCHAR(11),
   role_id_ VARCHAR(32),
-  password_ VARCHAR(20),
+  password_ VARCHAR(32),
   association_ids_ TEXT
 );
 
-INSERT INTO user(id_, number_, name_, role_id_, password_) VALUES('5dcfa6656e864bd9aacda2464548ce1b', 'admin', 'admin', 'a6ae79cace744ec08f1bc506de066e37', 'admin');
+INSERT INTO user(id_, number_, name_, role_id_, password_) VALUES('5dcfa6656e864bd9aacda2464548ce1b', 'admin', 'admin', 'a6ae79cace744ec08f1bc506de066e37', 'f4847d8ba3aa1fb1688de08921c18948');
 
 CREATE TABLE notice (
   id_ VARCHAR(32) PRIMARY KEY,

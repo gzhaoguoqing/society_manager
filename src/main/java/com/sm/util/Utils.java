@@ -4,6 +4,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.UUID;
 
 public class Utils {
@@ -53,11 +56,50 @@ public class Utils {
         return new File(getWorkDir() + relativePath);
     }
 
-    public static boolean isBlank(String str) {
-        return str == null || "".equals(str.trim());
+    /**
+     * md5加密
+     */
+    private static String md5Enc(String plainText) {
+        byte[] secretBytes = null;
+        try {
+            secretBytes = MessageDigest.getInstance("md5").digest(
+                    plainText.getBytes());
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException("没有md5这个算法！");
+        }
+        String md5code = new BigInteger(1, secretBytes).toString(16);
+        for (int i = 0; i < 32 - md5code.length(); i++) {
+            md5code = "0" + md5code;
+        }
+        return md5code;
     }
 
-    public static boolean isNotBlank(String str) {
-        return !isBlank(str);
+    /**
+     * 循环多次md5加密，默认加密40次
+     * @param str
+     * 	要加密的字符串
+     * @return
+     * 	加密后的字符串
+     */
+    public static String md5(String str) {
+        for (int i=0; i<40; i++) {
+            str = md5Enc(str);
+        }
+        return str;
+    }
+
+    /**
+     * @param str
+     * 	要加密的字符串
+     * @param n
+     *  加密的次数
+     * @return
+     * 	加密后的字符串
+     */
+    public static String md5(String str, int n) {
+        for (int i=0; i<n; i++) {
+            str = md5Enc(str);
+        }
+        return str;
     }
 }

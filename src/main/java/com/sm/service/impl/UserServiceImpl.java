@@ -3,17 +3,20 @@ package com.sm.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.sm.bo.UserBO;
 import com.sm.client.UserExample;
+import com.sm.dao.InfoMapper;
+import com.sm.dao.RoleMapper;
 import com.sm.dao.UserMapper;
+import com.sm.po.Role;
 import com.sm.po.User;
 import com.sm.service.InfoService;
 import com.sm.service.RoleService;
 import com.sm.service.UserService;
-import com.sm.util.Utils;
+import com.sm.util.StringUtils;
 import com.sm.vo.QueryEntry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,14 +26,22 @@ public class UserServiceImpl implements UserService {
     private UserMapper userMapper;
 
     @Autowired
+    private InfoMapper infoMapper;
+
+    @Autowired
+    private RoleMapper roleMapper;
+
+    @Autowired
     private InfoService infoService;
 
     @Autowired
     private RoleService roleService;
 
     @Override
+    @Transactional
     public void add(User user) {
         userMapper.insert(user);
+        Role role = roleMapper.selectByPrimaryKey(user.getRoleId());
     }
 
     @Override
@@ -60,9 +71,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<UserBO> getByPage(QueryEntry qry, String infoId) {
-        PageHelper.startPage(qry.getPage(), qry.getSize());
+        if (qry != null) {
+            PageHelper.startPage(qry.getPage(), qry.getSize());
+        }
         UserExample example = new UserExample();
-        if (Utils.isNotBlank(infoId)) {
+        example.setOrderByClause("number_");
+        if (StringUtils.isNotBlank(infoId)) {
             example.createCriteria().andAssociationIdsLike(infoId);
         }
         List<User> users = userMapper.selectByExample(example);
@@ -71,5 +85,14 @@ public class UserServiceImpl implements UserService {
             userBOs.add(new UserBO(user, infoService, roleService));
         }
         return userBOs;
+    }
+
+    @Override
+    public long getCount(String infoId) {
+        UserExample example = new UserExample();
+        if (StringUtils.isNotBlank(infoId)) {
+            example.createCriteria().andAssociationIdsLike(infoId);
+        }
+        return userMapper.countByExample(example);
     }
 }

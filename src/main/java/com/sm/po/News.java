@@ -1,5 +1,8 @@
 package com.sm.po;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.util.Date;
 
 public class News {
@@ -9,6 +12,7 @@ public class News {
 
     private String content;
 
+    @JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd HH:mm:ss")
     private Date date;
 
     private String authorId;

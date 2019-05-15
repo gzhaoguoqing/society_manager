@@ -10,9 +10,7 @@
     <result column="contact_way_" jdbcType="VARCHAR" property="contactWay" />
     <result column="role_id_" jdbcType="VARCHAR" property="roleId" />
     <result column="password_" jdbcType="VARCHAR" property="password" />
-  </resultMap>
-  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.sm.po.User">
-    <result column="association_ids_" jdbcType="LONGVARCHAR" property="associationIds" />
+    <result column="association_ids_" jdbcType="VARCHAR" property="associationIds" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -73,27 +71,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id_, number_, name_, sex_, classes_, contact_way_, role_id_, password_
+    id_, number_, name_, sex_, classes_, contact_way_, role_id_, password_, association_ids_
   </sql>
-  <sql id="Blob_Column_List">
-    association_ids_
-  </sql>
-  <select id="selectByExampleWithBLOBs" parameterType="com.sm.client.UserExample" resultMap="ResultMapWithBLOBs">
-    select
-    <if test="distinct">
-      distinct
-    </if>
-    <include refid="Base_Column_List" />
-    ,
-    <include refid="Blob_Column_List" />
-    from user
-    <if test="_parameter != null">
-      <include refid="Example_Where_Clause" />
-    </if>
-    <if test="orderByClause != null">
-      order by ${orderByClause}
-    </if>
-  </select>
   <select id="selectByExample" parameterType="com.sm.client.UserExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
@@ -108,11 +87,9 @@
       order by ${orderByClause}
     </if>
   </select>
-  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="ResultMapWithBLOBs">
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    ,
-    <include refid="Blob_Column_List" />
     from user
     where id_ = #{id,jdbcType=VARCHAR}
   </select>
@@ -133,7 +110,7 @@
       )
     values (#{id,jdbcType=VARCHAR}, #{number,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
       #{sex,jdbcType=INTEGER}, #{classes,jdbcType=VARCHAR}, #{contactWay,jdbcType=VARCHAR}, 
-      #{roleId,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, #{associationIds,jdbcType=LONGVARCHAR}
+      #{roleId,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, #{associationIds,jdbcType=VARCHAR}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.sm.po.User">
@@ -193,7 +170,7 @@
         #{password,jdbcType=VARCHAR},
       </if>
       <if test="associationIds != null">
-        #{associationIds,jdbcType=LONGVARCHAR},
+        #{associationIds,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -231,24 +208,9 @@
         password_ = #{record.password,jdbcType=VARCHAR},
       </if>
       <if test="record.associationIds != null">
-        association_ids_ = #{record.associationIds,jdbcType=LONGVARCHAR},
+        association_ids_ = #{record.associationIds,jdbcType=VARCHAR},
       </if>
     </set>
-    <if test="_parameter != null">
-      <include refid="Update_By_Example_Where_Clause" />
-    </if>
-  </update>
-  <update id="updateByExampleWithBLOBs" parameterType="map">
-    update user
-    set id_ = #{record.id,jdbcType=VARCHAR},
-      number_ = #{record.number,jdbcType=VARCHAR},
-      name_ = #{record.name,jdbcType=VARCHAR},
-      sex_ = #{record.sex,jdbcType=INTEGER},
-      classes_ = #{record.classes,jdbcType=VARCHAR},
-      contact_way_ = #{record.contactWay,jdbcType=VARCHAR},
-      role_id_ = #{record.roleId,jdbcType=VARCHAR},
-      password_ = #{record.password,jdbcType=VARCHAR},
-      association_ids_ = #{record.associationIds,jdbcType=LONGVARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -262,7 +224,8 @@
       classes_ = #{record.classes,jdbcType=VARCHAR},
       contact_way_ = #{record.contactWay,jdbcType=VARCHAR},
       role_id_ = #{record.roleId,jdbcType=VARCHAR},
-      password_ = #{record.password,jdbcType=VARCHAR}
+      password_ = #{record.password,jdbcType=VARCHAR},
+      association_ids_ = #{record.associationIds,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -292,21 +255,9 @@
         password_ = #{password,jdbcType=VARCHAR},
       </if>
       <if test="associationIds != null">
-        association_ids_ = #{associationIds,jdbcType=LONGVARCHAR},
+        association_ids_ = #{associationIds,jdbcType=VARCHAR},
       </if>
     </set>
-    where id_ = #{id,jdbcType=VARCHAR}
-  </update>
-  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.sm.po.User">
-    update user
-    set number_ = #{number,jdbcType=VARCHAR},
-      name_ = #{name,jdbcType=VARCHAR},
-      sex_ = #{sex,jdbcType=INTEGER},
-      classes_ = #{classes,jdbcType=VARCHAR},
-      contact_way_ = #{contactWay,jdbcType=VARCHAR},
-      role_id_ = #{roleId,jdbcType=VARCHAR},
-      password_ = #{password,jdbcType=VARCHAR},
-      association_ids_ = #{associationIds,jdbcType=LONGVARCHAR}
     where id_ = #{id,jdbcType=VARCHAR}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.sm.po.User">
@@ -317,7 +268,8 @@
       classes_ = #{classes,jdbcType=VARCHAR},
       contact_way_ = #{contactWay,jdbcType=VARCHAR},
       role_id_ = #{roleId,jdbcType=VARCHAR},
-      password_ = #{password,jdbcType=VARCHAR}
+      password_ = #{password,jdbcType=VARCHAR},
+      association_ids_ = #{associationIds,jdbcType=VARCHAR}
     where id_ = #{id,jdbcType=VARCHAR}
   </update>
 </mapper>
