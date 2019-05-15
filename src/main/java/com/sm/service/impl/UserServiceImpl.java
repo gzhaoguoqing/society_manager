@@ -12,6 +12,7 @@ import com.sm.service.InfoService;
 import com.sm.service.RoleService;
 import com.sm.service.UserService;
 import com.sm.util.StringUtils;
+import com.sm.util.Utils;
 import com.sm.vo.QueryEntry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -54,6 +55,16 @@ public class UserServiceImpl implements UserService {
     @Override
     public void updateById(User user) {
         userMapper.updateByPrimaryKeySelective(user);
+    }
+
+    @Override
+    @Transactional
+    public void resetPwd(List<String> ids) {
+        for (String id : ids) {
+            User dbUser = userMapper.selectByPrimaryKey(id);
+            dbUser.setPassword(Utils.md5(dbUser.getNumber()));
+            userMapper.updateByPrimaryKey(dbUser);
+        }
     }
 
     @Override

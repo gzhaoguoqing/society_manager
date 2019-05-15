@@ -32,6 +32,23 @@ public class NewsController {
         return result;
     }
 
+    @GetMapping("/important")
+    public ResultEntry<List<NewsBO>> important(Integer size) {
+        if (size == null) {
+            size = 4;
+        }
+        ResultEntry<List<NewsBO>> result = new ResultEntry<>();
+        result.setData(newsService.getImportant(size));
+        return result;
+    }
+
+    @GetMapping("/{id}")
+    public ResultEntry<NewsBO> getById(@PathVariable String id) {
+        ResultEntry<NewsBO> result = new ResultEntry<>();
+        result.setData(newsService.getById(id));
+        return result;
+    }
+
     @PostMapping
     public ResultEntry add(@RequestBody News news) {
         UserBO loginedUser = (UserBO) SecurityUtils.getSubject().getPrincipal();

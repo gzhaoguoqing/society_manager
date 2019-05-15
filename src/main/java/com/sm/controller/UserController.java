@@ -50,4 +50,11 @@ public class UserController {
         userService.updateById(user);
         return new ResultEntry();
     }
+
+    @PutMapping("/{ids}")
+    public ResultEntry resetPwd(@PathVariable String ids) throws UnsupportedEncodingException {
+        ids = URLDecoder.decode(ids, "utf-8");
+        userService.resetPwd(Arrays.asList(ids.split(",")));
+        return new ResultEntry();
+    }
 }

@@ -17,5 +17,7 @@ public interface NewsService {
 
     public List<NewsBO> getByPage(QueryEntry qry);
 
+    public List<NewsBO> getImportant(Integer size);
+
     public long getCount();
 }

@@ -9,9 +9,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.net.URLEncoder;
 
 @RestController
 @RequestMapping
@@ -35,17 +39,40 @@ public class FileUploadController {
     }
 
     @GetMapping(value="/api/file/img", produces = MediaType.IMAGE_JPEG_VALUE)
-    public byte[] getImg(String path) {
+    public byte[] getImg(String path) throws IOException {
+        path = URLDecoder.decode(path, "utf-8");
+        return getUploadFile(path);
+    }
+
+    /**
+     * 上传文件
+     * @param file
+     * @return
+     */
+    @PostMapping("/api/file")
+    public ResultEntry uploadFile(MultipartFile file) {
+        ResultEntry<String> result = new ResultEntry<>();
         try {
-            path = URLDecoder.decode(path, "utf-8");
-            FileInputStream inputStream = new FileInputStream(Utils.getUploadImgAndFile(path));
-            byte[] bytes = new byte[inputStream.available()];
-            inputStream.read(bytes, 0, inputStream.available());
-            return bytes;
+            String path = Utils.saveUploadFile(file);
+            result.setData(path);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return null;
+        return result;
+    }
 
+    @GetMapping(value="/api/file")
+    public byte[] getFile(HttpServletResponse response, String path) throws IOException {
+        path = URLDecoder.decode(path, "utf-8");
+        String filename = path.substring(path.lastIndexOf("/") + 1, path.length());
+        response.setHeader("Content-Disposition","attachment;filename=" + URLEncoder.encode(filename, "utf-8"));
+        return getUploadFile(path);
+    }
+
+    private byte[] getUploadFile(String path) throws IOException {
+        FileInputStream inputStream = new FileInputStream(Utils.getUploadImgAndFile(path));
+        byte[] bytes = new byte[inputStream.available()];
+        inputStream.read(bytes, 0, inputStream.available());
+        return bytes;
     }
 }

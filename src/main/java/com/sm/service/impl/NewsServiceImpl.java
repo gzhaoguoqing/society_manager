@@ -49,7 +49,23 @@ public class NewsServiceImpl implements NewsService {
         if (qry != null) {
             PageHelper.startPage(qry.getPage(), qry.getSize());
         }
-        List<News> newses = mapper.selectByExample(null);
+        NewsExample example = new NewsExample();
+        example.setOrderByClause("date_ desc");
+        List<News> newses = mapper.selectByExample(example);
+        ArrayList<NewsBO> newsBOs = new ArrayList<>();
+        for (News news : newses) {
+            newsBOs.add(new NewsBO(news, userService));
+        }
+        return newsBOs;
+    }
+
+    @Override
+    public List<NewsBO> getImportant(Integer size) {
+        PageHelper.startPage(0, size);
+        NewsExample example = new NewsExample();
+        example.createCriteria().andImportantEqualTo(1);
+        example.setOrderByClause("date_ desc");
+        List<News> newses = mapper.selectByExample(example);
         ArrayList<NewsBO> newsBOs = new ArrayList<>();
         for (News news : newses) {
             newsBOs.add(new NewsBO(news, userService));

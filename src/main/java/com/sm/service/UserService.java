@@ -13,6 +13,8 @@ public interface UserService {
 
     public void updateById(User user);
 
+    public void resetPwd(List<String> ids);
+
     public UserBO getById(String id);
 
     public UserBO getByNumber(String number);

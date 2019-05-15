@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.xml.transform.Result;
+
 @RestController
 @RequestMapping(("/api"))
 public class LoginController {
@@ -42,6 +44,9 @@ public class LoginController {
     public ResultEntry<UserBO> getLoginUser() {
         ResultEntry<UserBO> result = new ResultEntry<>();
         result.setData((UserBO) SecurityUtils.getSubject().getPrincipal());
+        if (result.getData() == null) {
+            result.setCode(ResultEntry.UNLOGIN);
+        }
         return result;
     }
 
