@@ -7,6 +7,8 @@ import com.sm.dao.NoticeMapper;
 import com.sm.po.Notice;
 import com.sm.service.NoticeService;
 import com.sm.service.UserService;
+import com.sm.util.StringUtils;
+import com.sm.vo.NoticeQuery;
 import com.sm.vo.QueryEntry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -46,12 +48,15 @@ public class NoticeServiceImpl implements NoticeService {
     }
 
     @Override
-    public List<NoticeBO> getByPage(QueryEntry qry) {
-        if (qry != null) {
+    public List<NoticeBO> getByPage(NoticeQuery qry) {
+        if (qry.getPage() != null && qry.getSize() != null) {
             PageHelper.startPage(qry.getPage(), qry.getSize());
         }
         NoticeExample example = new NoticeExample();
         example.setOrderByClause("date_ desc");
+        if (StringUtils.isNotBlank(qry.getTitle())) {
+            example.createCriteria().andTitleLike(qry.getTitle());
+        }
         List<Notice> notices = noticeMapper.selectByExample(example);
         ArrayList<NoticeBO> noticeBOS = new ArrayList<>();
         for (Notice notice : notices) {

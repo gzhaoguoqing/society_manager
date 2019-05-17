@@ -46,7 +46,7 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public List<RoleBO> getByPage(QueryEntry qry) {
-        if (qry != null) {
+        if (qry.getPage() != null && qry.getSize() != null) {
             PageHelper.startPage(qry.getPage(), qry.getSize());
         }
         List<Role> roles = roleMapper.selectByExample(null);

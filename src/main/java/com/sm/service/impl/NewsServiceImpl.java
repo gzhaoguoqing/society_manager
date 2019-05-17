@@ -46,7 +46,7 @@ public class NewsServiceImpl implements NewsService {
 
     @Override
     public List<NewsBO> getByPage(QueryEntry qry) {
-        if (qry != null) {
+        if (qry.getPage() != null && qry.getSize() != null) {
             PageHelper.startPage(qry.getPage(), qry.getSize());
         }
         NewsExample example = new NewsExample();

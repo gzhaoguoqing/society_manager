@@ -45,7 +45,12 @@ public class NewsController {
     @GetMapping("/{id}")
     public ResultEntry<NewsBO> getById(@PathVariable String id) {
         ResultEntry<NewsBO> result = new ResultEntry<>();
-        result.setData(newsService.getById(id));
+        NewsBO newsBO = newsService.getById(id);
+        result.setData(newsBO);
+        News news = new News();
+        news.setId(id);
+        news.setClicks(newsBO.getClicks() + 1);
+        newsService.updateById(news);
         return result;
     }
 

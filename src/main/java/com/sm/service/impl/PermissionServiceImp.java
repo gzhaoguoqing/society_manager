@@ -42,7 +42,7 @@ public class PermissionServiceImp implements PermissionService {
 
     @Override
     public List<PermissionBO> getByPage(QueryEntry qry) {
-        if (qry != null) {
+        if (qry.getPage() != null && qry.getSize() != null) {
             PageHelper.startPage(qry.getPage(), qry.getSize());
         }
         List<Permission> permissions = permissionMapper.selectByExample(null);

@@ -5,6 +5,7 @@ import com.sm.bo.UserBO;
 import com.sm.po.Notice;
 import com.sm.service.NoticeService;
 import com.sm.util.Utils;
+import com.sm.vo.NoticeQuery;
 import com.sm.vo.QueryEntry;
 import com.sm.vo.ResultEntry;
 import org.apache.shiro.SecurityUtils;
@@ -24,7 +25,7 @@ public class NoticeController {
     private NoticeService noticeService;
 
     @GetMapping
-    public ResultEntry<List<NoticeBO>> list(QueryEntry qry) {
+    public ResultEntry<List<NoticeBO>> list(NoticeQuery qry) {
         ResultEntry<List<NoticeBO>> result = new ResultEntry<>();
         result.setTotal(noticeService.getCount());
         result.setData(noticeService.getByPage(qry));

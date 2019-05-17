@@ -46,7 +46,7 @@ public class InfoServiceImpl implements InfoService {
 
     @Override
     public List<InfoBO> getByPage(QueryEntry qry) {
-        if (qry != null) {
+        if (qry.getPage() != null && qry.getSize() != null) {
             PageHelper.startPage(qry.getPage(), qry.getSize());
         }
         List<Info> infos = infoMapper.selectByExample(null);

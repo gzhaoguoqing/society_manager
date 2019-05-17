@@ -1,5 +1,7 @@
 package com.sm.po;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.util.Date;
 
 public class Activity {
@@ -17,8 +19,10 @@ public class Activity {
 
     private Integer applyUp;
 
+    @JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd HH:mm:ss")
     private Date applyStartTime;
 
+    @JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd HH:mm:ss")
     private Date applyEndTime;
 
     private String labels;

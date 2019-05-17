@@ -17,7 +17,7 @@ public class StringUtils {
         }
         String joinStr = list.get(0);
         for (int i = 1; i < list.size(); i++) {
-            joinStr += "," + list.get(i);
+            joinStr += split + list.get(i);
         }
         return joinStr;
     }
