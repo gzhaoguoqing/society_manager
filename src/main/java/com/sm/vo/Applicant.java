@@ -1,12 +1,21 @@
 package com.sm.vo;
 
 public class Applicant {
+    private String id;
     private String activityId;
     private String number;
     private String name;
     private Integer sex;
     private String classes;
     private String phone;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getActivityId() {
         return activityId;

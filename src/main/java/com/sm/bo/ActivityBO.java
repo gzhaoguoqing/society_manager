@@ -136,11 +136,12 @@ public class ActivityBO {
             for (String str : applicants) {
                 String[] prop = str.split(",");
                 Applicant applicant = new Applicant();
-                applicant.setNumber(prop[0]);
-                applicant.setName(prop[1]);
-                applicant.setSex(Integer.parseInt(prop[2]));
-                applicant.setClasses(prop[3]);
-                applicant.setPhone(prop[4]);
+                applicant.setId(prop[0]);
+                applicant.setNumber(prop[1]);
+                applicant.setName(prop[2]);
+                applicant.setSex(Integer.parseInt(prop[3]));
+                applicant.setClasses(prop[4]);
+                applicant.setPhone(prop[5]);
                 applicant.setActivityId(activity.getId());
                 this.participantors.add(applicant);
             }
