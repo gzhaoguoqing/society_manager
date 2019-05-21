@@ -2,9 +2,7 @@ package com.sm.bo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.sm.po.Post;
-import com.sm.service.TopicService;
-import com.sm.service.UpService;
-import com.sm.service.UserService;
+import com.sm.service.*;
 import com.sm.util.StringUtils;
 import org.springframework.beans.BeanUtils;
 
@@ -28,12 +26,14 @@ public class PostBO {
 
     private List<UpBO> ups = new ArrayList<>();
 
+    private List<CommentBO> comments = new ArrayList<>();
+
     public PostBO() {
 
     }
 
-    public PostBO(Post post, UserService userService, UpService upService, TopicService topicService) {
-        parse(post, userService, upService, topicService);
+    public PostBO(Post post, UserService userService, UpService upService, TopicService topicService, CommentService commentService) {
+        parse(post, userService, upService, topicService, commentService);
     }
 
     public String getId() {
@@ -92,7 +92,15 @@ public class PostBO {
         this.ups = ups;
     }
 
-    private void parse(Post post, UserService userService, UpService upService, TopicService topicService) {
+    public List<CommentBO> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<CommentBO> comments) {
+        this.comments = comments;
+    }
+
+    private void parse(Post post, UserService userService, UpService upService, TopicService topicService, CommentService commentService) {
         if (post == null) {
             return;
         }
@@ -104,6 +112,7 @@ public class PostBO {
         this.author = users;
         List<UpBO> ups = upService.getByPostId(post.getId());
         this.ups = ups;
+        this.comments = commentService.getByPage(post.getId());
         String[] topicIds = {};
         if (StringUtils.isNotBlank(post.getTopicIds())) {
             topicIds = post.getTopicIds().split(",");

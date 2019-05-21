@@ -9,4 +9,6 @@ public interface UpService {
     public void add(Up up);
 
     public List<UpBO> getByPostId(String postId);
+
+    public boolean existUp(Up up);
 }

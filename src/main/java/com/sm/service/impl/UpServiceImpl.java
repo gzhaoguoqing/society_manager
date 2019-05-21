@@ -36,4 +36,16 @@ public class UpServiceImpl implements UpService {
         }
         return upBOList;
     }
+
+    @Override
+    public boolean existUp(Up up) {
+        UpExample example = new UpExample();
+        example.createCriteria().andPostIdEqualTo(up.getPostId()).andAuthorIdEqualTo(up.getAuthorId());
+        long count = upMapper.countByExample(example);
+        if (count == 0) {
+            return false;
+        } else {
+            return true;
+        }
+    }
 }

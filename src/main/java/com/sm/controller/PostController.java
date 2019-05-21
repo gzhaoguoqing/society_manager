@@ -3,10 +3,14 @@ package com.sm.controller;
 import com.sm.bo.PostBO;
 import com.sm.bo.TopicBO;
 import com.sm.bo.UserBO;
+import com.sm.po.Comment;
 import com.sm.po.Post;
 import com.sm.po.Topic;
+import com.sm.po.Up;
+import com.sm.service.CommentService;
 import com.sm.service.PostService;
 import com.sm.service.TopicService;
+import com.sm.service.UpService;
 import com.sm.util.Utils;
 import com.sm.vo.PostQuery;
 import com.sm.vo.QueryEntry;
@@ -26,6 +30,12 @@ import java.util.List;
 public class PostController {
     @Autowired
     private PostService postService;
+
+    @Autowired
+    private CommentService commentService;
+
+    @Autowired
+    private UpService upService;
 
     @GetMapping
     public ResultEntry<List<PostBO>> list(PostQuery qry) {
@@ -62,6 +72,26 @@ public class PostController {
     @PutMapping
     public ResultEntry update(@RequestBody Post post) {
         postService.updateById(post);
+        return new ResultEntry();
+    }
+
+    @PostMapping("/comment")
+    public ResultEntry addComment(@RequestBody Comment comment) {
+        UserBO loginedUser = (UserBO) SecurityUtils.getSubject().getPrincipal();
+        comment.setId(Utils.getUUID());
+        comment.setAuthorId(loginedUser.getId());
+        comment.setDate(new Date());
+        commentService.add(comment);
+        return new ResultEntry();
+    }
+
+    @PostMapping("/up")
+    public ResultEntry addUp(@RequestBody Up up) {
+        UserBO loginedUser = (UserBO) SecurityUtils.getSubject().getPrincipal();
+        up.setAuthorId(loginedUser.getId());
+        if (!upService.existUp(up)) {
+            upService.add(up);
+        }
         return new ResultEntry();
     }
 }

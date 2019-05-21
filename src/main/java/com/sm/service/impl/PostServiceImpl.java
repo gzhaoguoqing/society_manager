@@ -5,10 +5,7 @@ import com.sm.bo.PostBO;
 import com.sm.client.PostExample;
 import com.sm.dao.PostMapper;
 import com.sm.po.Post;
-import com.sm.service.PostService;
-import com.sm.service.TopicService;
-import com.sm.service.UpService;
-import com.sm.service.UserService;
+import com.sm.service.*;
 import com.sm.vo.PostQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,6 +27,9 @@ public class PostServiceImpl implements PostService {
     @Autowired
     private TopicService topicService;
 
+    @Autowired
+    private CommentService commentService;
+
     @Override
     public void add(Post post) {
         postMapper.insert(post);
@@ -49,7 +49,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public PostBO getById(String id) {
-        return new PostBO(postMapper.selectByPrimaryKey(id), userService, upService, topicService);
+        return new PostBO(postMapper.selectByPrimaryKey(id), userService, upService, topicService,  commentService);
     }
 
     @Override
@@ -58,11 +58,12 @@ public class PostServiceImpl implements PostService {
             PageHelper.startPage(qry.getPage(), qry.getSize());
         }
         PostExample example = new PostExample();
-        example.createCriteria().andTopicIdsLike(qry.getTopicId());
+        example.createCriteria().andTopicIdsLike("%" + qry.getTopicId() + "%");
+        example.setOrderByClause("date_ desc");
         List<Post> postList = postMapper.selectByExample(example);
         List<PostBO> postBOList = new ArrayList<>();
         for (Post post : postList) {
-            postBOList.add(new PostBO(post, userService, upService, topicService));
+            postBOList.add(new PostBO(post, userService, upService, topicService, commentService));
         }
         return postBOList;
     }
