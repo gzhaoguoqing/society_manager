@@ -27,7 +27,7 @@ public class NoticeController {
     @GetMapping
     public ResultEntry<List<NoticeBO>> list(NoticeQuery qry) {
         ResultEntry<List<NoticeBO>> result = new ResultEntry<>();
-        result.setTotal(noticeService.getCount());
+        result.setTotal(noticeService.getCount(qry));
         result.setData(noticeService.getByPage(qry));
         return result;
     }

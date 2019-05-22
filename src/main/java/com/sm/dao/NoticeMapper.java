@@ -2,6 +2,7 @@ package com.sm.dao;
 
 import com.sm.client.NoticeExample;
 import com.sm.po.Notice;
+import com.sm.vo.NoticeQuery;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -30,4 +31,8 @@ public interface NoticeMapper {
     int updateByPrimaryKeySelective(Notice record);
 
     int updateByPrimaryKey(Notice record);
+
+    List<Notice> selectByQuery(NoticeQuery qry);
+
+    long countByQuery(NoticeQuery qry);
 }

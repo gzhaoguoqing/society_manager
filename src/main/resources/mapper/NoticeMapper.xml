@@ -225,4 +225,37 @@
       file_paths_ = #{filePaths,jdbcType=VARCHAR}
     where id_ = #{id,jdbcType=VARCHAR}
   </update>
+  <select id="selectByQuery" parameterType="com.sm.vo.NoticeQuery" resultMap="BaseResultMap">
+    select
+      user.id_ id_, title_, content_, date_, author_id_, file_paths_
+    from notice, user
+    <if test="_parameter != null">
+      <where>
+        notice.author_id_ = user.id_
+        <if test="title != null and title != ''">
+          and title_ like concat('%', #{title}, '%')
+        </if>
+        <if test="authorId != null and authorId != ''">
+          and user.id_ = #{authorId}
+        </if>
+      </where>
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="countByQuery" parameterType="com.sm.vo.NoticeQuery" resultType="java.lang.Long">
+    select count(*) from notice, user
+    <if test="_parameter != null">
+      <where>
+        notice.author_id_ = user.id_
+        <if test="title != null and title != ''">
+          and title_ like concat('%', #{title}, '%')
+        </if>
+        <if test="authorId != null and authorId != ''">
+          and user.id_ = #{authorId}
+        </if>
+      </where>
+    </if>
+  </select>
 </mapper>

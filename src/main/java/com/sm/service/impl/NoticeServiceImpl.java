@@ -52,12 +52,8 @@ public class NoticeServiceImpl implements NoticeService {
         if (qry.getPage() != null && qry.getSize() != null) {
             PageHelper.startPage(qry.getPage(), qry.getSize());
         }
-        NoticeExample example = new NoticeExample();
-        example.setOrderByClause("date_ desc");
-        if (StringUtils.isNotBlank(qry.getTitle())) {
-            example.createCriteria().andTitleLike(qry.getTitle());
-        }
-        List<Notice> notices = noticeMapper.selectByExample(example);
+        qry.setOrderByClause("date_ desc");
+        List<Notice> notices = noticeMapper.selectByQuery(qry);
         ArrayList<NoticeBO> noticeBOS = new ArrayList<>();
         for (Notice notice : notices) {
             noticeBOS.add(new NoticeBO(notice, userService));
@@ -66,7 +62,7 @@ public class NoticeServiceImpl implements NoticeService {
     }
 
     @Override
-    public long getCount() {
-        return noticeMapper.countByExample(null);
+    public long getCount(NoticeQuery qry) {
+        return noticeMapper.countByQuery(qry);
     }
 }

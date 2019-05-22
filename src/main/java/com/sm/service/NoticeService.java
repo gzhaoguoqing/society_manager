@@ -18,5 +18,5 @@ public interface NoticeService {
 
     public List<NoticeBO> getByPage(NoticeQuery qry);
 
-    public long getCount();
+    public long getCount(NoticeQuery qry);
 }
