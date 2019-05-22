@@ -56,7 +56,7 @@ public class ActivityServiceImpl implements ActivityService {
 
     @Override
     public List<ActivityBO> getByPage(ActivityQuery qry) {
-        if (qry.getPage() != null && qry.getSize() != null) {
+        if (qry != null && qry.getPage() != null && qry.getSize() != null) {
             PageHelper.startPage(qry.getPage(), qry.getSize());
         }
         qry.setOrderByClause("apply_start_time_ desc");

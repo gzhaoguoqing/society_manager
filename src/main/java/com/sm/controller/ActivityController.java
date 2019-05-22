@@ -10,13 +10,17 @@ import com.sm.vo.ActivityQuery;
 import com.sm.vo.Applicant;
 import com.sm.vo.QueryEntry;
 import com.sm.vo.ResultEntry;
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVPrinter;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.UnsupportedEncodingException;
+import javax.servlet.http.HttpServletResponse;
+import java.io.*;
 import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -137,5 +141,36 @@ public class ActivityController {
         activity.setParticipantors(StringUtils.join(participantorStrList, ";"));
         activityService.updateById(activity);
         return new ResultEntry();
+    }
+
+    @GetMapping("/applicant/export/{activityId}")
+    public byte[] export(HttpServletResponse response, @PathVariable String activityId) throws IOException {
+        String[] header = new String[] {"学号", "姓名", "性别", "班级", "电话"};
+        CSVFormat csvFormat = CSVFormat.DEFAULT.withHeader(header);
+        File file = new File(Utils.getTempDir() + "/export/报名信息.csv");
+        if (!file.getParentFile().exists()) {
+            file.getParentFile().mkdirs();
+        }
+        FileWriter fileWriter = new FileWriter(file);
+        CSVPrinter csvPrinter = new CSVPrinter(fileWriter, csvFormat);
+        List<Applicant> participantors = activityService.getById(activityId).getParticipantors();
+        for (Applicant applicant : participantors) {
+            ArrayList<String> record = new ArrayList<>();
+            record.add(applicant.getNumber());
+            record.add(applicant.getName());
+            record.add(applicant.getSex()==0 ? "男" : "女");
+            record.add(applicant.getClasses());
+            record.add(applicant.getPhone());
+            csvPrinter.printRecord(record);
+        }
+        csvPrinter.flush();
+        fileWriter.close();
+        csvPrinter.close();
+
+        response.setHeader("Content-Disposition","attachment;filename=" + URLEncoder.encode(file.getName(), "utf-8"));
+        FileInputStream inputStream = new FileInputStream(file);
+        byte[] bytes = new byte[inputStream.available()];
+        inputStream.read(bytes, 0, inputStream.available());
+        return bytes;
     }
 }

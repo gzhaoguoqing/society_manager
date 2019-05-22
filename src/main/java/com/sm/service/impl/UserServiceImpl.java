@@ -82,7 +82,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<UserBO> getByPage(QueryEntry qry, String infoId) {
-        if (qry.getPage() != null && qry.getSize() != null) {
+        if (qry != null && qry.getPage() != null && qry.getSize() != null) {
             PageHelper.startPage(qry.getPage(), qry.getSize());
         }
         UserExample example = new UserExample();

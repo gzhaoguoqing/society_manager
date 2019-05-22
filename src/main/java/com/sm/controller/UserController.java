@@ -10,12 +10,17 @@ import com.sm.util.StringUtils;
 import com.sm.util.Utils;
 import com.sm.vo.QueryEntry;
 import com.sm.vo.ResultEntry;
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVPrinter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.io.UnsupportedEncodingException;
+import javax.servlet.http.HttpServletResponse;
+import java.io.*;
 import java.net.URLDecoder;
+import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -82,5 +87,43 @@ public class UserController {
         ids = URLDecoder.decode(ids, "utf-8");
         userService.resetPwd(Arrays.asList(ids.split(",")));
         return new ResultEntry();
+    }
+
+    @GetMapping("/export")
+    public byte[] export(HttpServletResponse response, @RequestParam(value="infoId", required = false) String infoId) throws IOException {
+        String[] header = new String[] {"学号/工号", "姓名", "性别", "班级", "联系方式", "角色", "社团"};
+        if (infoId != null) {
+            header = new String[] {"学号/工号", "姓名", "性别", "班级", "联系方式", "角色"};
+        }
+        CSVFormat csvFormat = CSVFormat.DEFAULT.withHeader(header);
+        File file = new File(Utils.getTempDir() + "/export/成员信息.csv");
+        if (!file.getParentFile().exists()) {
+            file.getParentFile().mkdirs();
+        }
+        FileWriter fileWriter = new FileWriter(file);
+        CSVPrinter csvPrinter = new CSVPrinter(fileWriter, csvFormat);
+        List<UserBO> users = userService.getByPage(null, infoId);
+        for (UserBO user : users) {
+            ArrayList<String> record = new ArrayList<>();
+            record.add(user.getNumber());
+            record.add(user.getName());
+            record.add(user.getSex()==0 ? "男" : "女");
+            record.add(user.getClasses());
+            record.add(user.getContactWay());
+            record.add(user.getRole().getName());
+            if (infoId == null) {
+                record.add(user.getAssociations().size()>0 ? user.getAssociations().get(0).getName() : "");
+            }
+            csvPrinter.printRecord(record);
+        }
+        csvPrinter.flush();
+        fileWriter.close();
+        csvPrinter.close();
+
+        response.setHeader("Content-Disposition","attachment;filename=" + URLEncoder.encode(file.getName(), "utf-8"));
+        FileInputStream inputStream = new FileInputStream(file);
+        byte[] bytes = new byte[inputStream.available()];
+        inputStream.read(bytes, 0, inputStream.available());
+        return bytes;
     }
 }
