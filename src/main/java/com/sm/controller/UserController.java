@@ -1,8 +1,12 @@
 package com.sm.controller;
 
+import com.github.pagehelper.util.StringUtil;
 import com.sm.bo.UserBO;
+import com.sm.po.Info;
 import com.sm.po.User;
+import com.sm.service.InfoService;
 import com.sm.service.UserService;
+import com.sm.util.StringUtils;
 import com.sm.util.Utils;
 import com.sm.vo.QueryEntry;
 import com.sm.vo.ResultEntry;
@@ -22,6 +26,9 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private InfoService infoService;
+
     @GetMapping
     public ResultEntry<List<UserBO>> list(QueryEntry qry, @RequestParam(value="infoId", required = false) String infoId) {
         ResultEntry<List<UserBO>> result = new ResultEntry<>();
@@ -34,6 +41,14 @@ public class UserController {
     public ResultEntry add(@RequestBody User user) {
         user.setId(Utils.getUUID());
         user.setPassword(Utils.md5(user.getNumber()));
+        if (StringUtils.isNotBlank(user.getRoleId()) && StringUtils.isNotBlank(user.getAssociationIds())) {
+            if (user.getRoleId().equals("bcd14ce4680942dc83acd9d42d4ead76")) {
+                Info info = new Info();
+                info.setId(user.getAssociationIds());
+                info.setCharityId(user.getId());
+                infoService.updateById(info);
+            }
+        }
         userService.add(user);
         return new ResultEntry();
     }
@@ -47,6 +62,17 @@ public class UserController {
 
     @PutMapping
     public ResultEntry update(@RequestBody User user) {
+        if (StringUtils.isNotBlank(user.getPassword())) {
+            user.setPassword(Utils.md5(user.getPassword()));
+        }
+        if (StringUtils.isNotBlank(user.getRoleId()) && StringUtils.isNotBlank(user.getAssociationIds())) {
+            if (user.getRoleId().equals("bcd14ce4680942dc83acd9d42d4ead76")) {
+                Info info = new Info();
+                info.setId(user.getAssociationIds());
+                info.setCharityId(user.getId());
+                infoService.updateById(info);
+            }
+        }
         userService.updateById(user);
         return new ResultEntry();
     }

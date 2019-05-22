@@ -27,6 +27,8 @@ public class Activity {
 
     private String labels;
 
+    private String associationId;
+
     public String getId() {
         return id;
     }
@@ -105,5 +107,13 @@ public class Activity {
 
     public void setLabels(String labels) {
         this.labels = labels == null ? null : labels.trim();
+    }
+
+    public String getAssociationId() {
+        return associationId;
+    }
+
+    public void setAssociationId(String associationId) {
+        this.associationId = associationId == null ? null : associationId.trim();
     }
 }

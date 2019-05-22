@@ -4,6 +4,7 @@ import com.sm.bo.ActivityBO;
 import com.sm.bo.InfoBO;
 import com.sm.po.Activity;
 import com.sm.po.Info;
+import com.sm.vo.ActivityQuery;
 import com.sm.vo.QueryEntry;
 
 import java.util.List;
@@ -17,7 +18,7 @@ public interface ActivityService {
 
     public ActivityBO getById(String id);
 
-    public List<ActivityBO> getByPage(QueryEntry qry);
+    public List<ActivityBO> getByPage(ActivityQuery qry);
 
-    public long getCount();
+    public long getCount(ActivityQuery qry);
 }

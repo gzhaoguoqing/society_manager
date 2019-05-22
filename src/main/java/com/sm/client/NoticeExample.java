@@ -514,6 +514,76 @@ public class NoticeExample {
             addCriterion("file_paths_ not between", value1, value2, "filePaths");
             return (Criteria) this;
         }
+
+        public Criteria andAssociationIdIsNull() {
+            addCriterion("association_id_ is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAssociationIdIsNotNull() {
+            addCriterion("association_id_ is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAssociationIdEqualTo(String value) {
+            addCriterion("association_id_ =", value, "associationId");
+            return (Criteria) this;
+        }
+
+        public Criteria andAssociationIdNotEqualTo(String value) {
+            addCriterion("association_id_ <>", value, "associationId");
+            return (Criteria) this;
+        }
+
+        public Criteria andAssociationIdGreaterThan(String value) {
+            addCriterion("association_id_ >", value, "associationId");
+            return (Criteria) this;
+        }
+
+        public Criteria andAssociationIdGreaterThanOrEqualTo(String value) {
+            addCriterion("association_id_ >=", value, "associationId");
+            return (Criteria) this;
+        }
+
+        public Criteria andAssociationIdLessThan(String value) {
+            addCriterion("association_id_ <", value, "associationId");
+            return (Criteria) this;
+        }
+
+        public Criteria andAssociationIdLessThanOrEqualTo(String value) {
+            addCriterion("association_id_ <=", value, "associationId");
+            return (Criteria) this;
+        }
+
+        public Criteria andAssociationIdLike(String value) {
+            addCriterion("association_id_ like", value, "associationId");
+            return (Criteria) this;
+        }
+
+        public Criteria andAssociationIdNotLike(String value) {
+            addCriterion("association_id_ not like", value, "associationId");
+            return (Criteria) this;
+        }
+
+        public Criteria andAssociationIdIn(List<String> values) {
+            addCriterion("association_id_ in", values, "associationId");
+            return (Criteria) this;
+        }
+
+        public Criteria andAssociationIdNotIn(List<String> values) {
+            addCriterion("association_id_ not in", values, "associationId");
+            return (Criteria) this;
+        }
+
+        public Criteria andAssociationIdBetween(String value1, String value2) {
+            addCriterion("association_id_ between", value1, value2, "associationId");
+            return (Criteria) this;
+        }
+
+        public Criteria andAssociationIdNotBetween(String value1, String value2) {
+            addCriterion("association_id_ not between", value1, value2, "associationId");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

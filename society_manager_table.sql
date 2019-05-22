@@ -40,7 +40,8 @@ CREATE TABLE notice (
   content_ TEXT,
   date_ TIMESTAMP,
   author_id_ VARCHAR(32),
-  file_paths_ TEXT
+  file_paths_ TEXT,
+  association_id_ VARCHAR(32)
 );
 
 CREATE TABLE info (
@@ -60,7 +61,8 @@ CREATE TABLE activity (
   apply_up_ INT,
   apply_start_time_ TIMESTAMP,
   apply_end_time_ TIMESTAMP,
-  labels_ TEXT
+  labels_ TEXT,
+  association_id_ VARCHAR(32)
 );
 
 CREATE TABLE news (

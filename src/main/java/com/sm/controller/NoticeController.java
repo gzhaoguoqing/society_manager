@@ -45,6 +45,9 @@ public class NoticeController {
         notice.setId(Utils.getUUID());
         notice.setDate(new Date());
         notice.setAuthorId(loginedUser.getId());
+        if (loginedUser.getAssociations() != null && loginedUser.getAssociations().size() > 0) {
+            notice.setAssociationId(loginedUser.getAssociations().get(0).getId());
+        }
         noticeService.add(notice);
         return new ResultEntry();
     }

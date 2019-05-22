@@ -5,6 +5,7 @@ import com.sm.bo.NoticeBO;
 import com.sm.client.NoticeExample;
 import com.sm.dao.NoticeMapper;
 import com.sm.po.Notice;
+import com.sm.service.InfoService;
 import com.sm.service.NoticeService;
 import com.sm.service.UserService;
 import com.sm.util.StringUtils;
@@ -25,6 +26,9 @@ public class NoticeServiceImpl implements NoticeService {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private InfoService infoService;
+
     @Override
     public void add(Notice notice) {
         noticeMapper.insert(notice);
@@ -44,7 +48,7 @@ public class NoticeServiceImpl implements NoticeService {
 
     @Override
     public NoticeBO getById(String id) {
-        return new NoticeBO(noticeMapper.selectByPrimaryKey(id), userService);
+        return new NoticeBO(noticeMapper.selectByPrimaryKey(id), userService, infoService);
     }
 
     @Override
@@ -56,7 +60,7 @@ public class NoticeServiceImpl implements NoticeService {
         List<Notice> notices = noticeMapper.selectByQuery(qry);
         ArrayList<NoticeBO> noticeBOS = new ArrayList<>();
         for (Notice notice : notices) {
-            noticeBOS.add(new NoticeBO(notice, userService));
+            noticeBOS.add(new NoticeBO(notice, userService, infoService));
         }
         return noticeBOS;
     }

@@ -1,5 +1,7 @@
 package com.sm.po;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.util.Date;
 
 public class Notice {
@@ -9,11 +11,14 @@ public class Notice {
 
     private String content;
 
+    @JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd HH:mm:ss")
     private Date date;
 
     private String authorId;
 
     private String filePaths;
+
+    private String associationId;
 
     public String getId() {
         return id;
@@ -61,5 +66,13 @@ public class Notice {
 
     public void setFilePaths(String filePaths) {
         this.filePaths = filePaths == null ? null : filePaths.trim();
+    }
+
+    public String getAssociationId() {
+        return associationId;
+    }
+
+    public void setAssociationId(String associationId) {
+        this.associationId = associationId == null ? null : associationId.trim();
     }
 }

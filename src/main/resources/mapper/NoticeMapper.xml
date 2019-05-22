@@ -8,6 +8,7 @@
     <result column="date_" jdbcType="TIMESTAMP" property="date" />
     <result column="author_id_" jdbcType="VARCHAR" property="authorId" />
     <result column="file_paths_" jdbcType="VARCHAR" property="filePaths" />
+    <result column="association_id_" jdbcType="VARCHAR" property="associationId" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -68,7 +69,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id_, title_, content_, date_, author_id_, file_paths_
+    id_, title_, content_, date_, author_id_, file_paths_, association_id_
   </sql>
   <select id="selectByExample" parameterType="com.sm.client.NoticeExample" resultMap="BaseResultMap">
     select
@@ -85,7 +86,7 @@
     </if>
   </select>
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
-    select 
+    select
     <include refid="Base_Column_List" />
     from notice
     where id_ = #{id,jdbcType=VARCHAR}
@@ -102,11 +103,11 @@
   </delete>
   <insert id="insert" parameterType="com.sm.po.Notice">
     insert into notice (id_, title_, content_, 
-      date_, author_id_, file_paths_
-      )
+      date_, author_id_, file_paths_, 
+      association_id_)
     values (#{id,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR}, #{content,jdbcType=VARCHAR}, 
-      #{date,jdbcType=TIMESTAMP}, #{authorId,jdbcType=VARCHAR}, #{filePaths,jdbcType=VARCHAR}
-      )
+      #{date,jdbcType=TIMESTAMP}, #{authorId,jdbcType=VARCHAR}, #{filePaths,jdbcType=VARCHAR}, 
+      #{associationId,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.sm.po.Notice">
     insert into notice
@@ -129,6 +130,9 @@
       <if test="filePaths != null">
         file_paths_,
       </if>
+      <if test="associationId != null">
+        association_id_,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -148,6 +152,9 @@
       </if>
       <if test="filePaths != null">
         #{filePaths,jdbcType=VARCHAR},
+      </if>
+      <if test="associationId != null">
+        #{associationId,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -178,6 +185,9 @@
       <if test="record.filePaths != null">
         file_paths_ = #{record.filePaths,jdbcType=VARCHAR},
       </if>
+      <if test="record.associationId != null">
+        association_id_ = #{record.associationId,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -186,11 +196,12 @@
   <update id="updateByExample" parameterType="map">
     update notice
     set id_ = #{record.id,jdbcType=VARCHAR},
-      title_ = #{record.title,jdbcType=VARCHAR},
-      content_ = #{record.content,jdbcType=VARCHAR},
-      date_ = #{record.date,jdbcType=TIMESTAMP},
-      author_id_ = #{record.authorId,jdbcType=VARCHAR},
-      file_paths_ = #{record.filePaths,jdbcType=VARCHAR}
+    title_ = #{record.title,jdbcType=VARCHAR},
+    content_ = #{record.content,jdbcType=VARCHAR},
+    date_ = #{record.date,jdbcType=TIMESTAMP},
+    author_id_ = #{record.authorId,jdbcType=VARCHAR},
+    file_paths_ = #{record.filePaths,jdbcType=VARCHAR},
+    association_id_ = #{record.associationId,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -213,6 +224,9 @@
       <if test="filePaths != null">
         file_paths_ = #{filePaths,jdbcType=VARCHAR},
       </if>
+      <if test="associationId != null">
+        association_id_ = #{associationId,jdbcType=VARCHAR},
+      </if>
     </set>
     where id_ = #{id,jdbcType=VARCHAR}
   </update>
@@ -222,21 +236,22 @@
       content_ = #{content,jdbcType=VARCHAR},
       date_ = #{date,jdbcType=TIMESTAMP},
       author_id_ = #{authorId,jdbcType=VARCHAR},
-      file_paths_ = #{filePaths,jdbcType=VARCHAR}
+      file_paths_ = #{filePaths,jdbcType=VARCHAR},
+      association_id_ = #{associationId,jdbcType=VARCHAR}
     where id_ = #{id,jdbcType=VARCHAR}
   </update>
   <select id="selectByQuery" parameterType="com.sm.vo.NoticeQuery" resultMap="BaseResultMap">
     select
-      user.id_ id_, title_, content_, date_, author_id_, file_paths_
-    from notice, user
+      info.id_ id_, title_, content_, date_, author_id_, file_paths_, association_id_
+    from notice left join info
+      on notice.association_id_ = info.id_
     <if test="_parameter != null">
       <where>
-        notice.author_id_ = user.id_
         <if test="title != null and title != ''">
           and title_ like concat('%', #{title}, '%')
         </if>
-        <if test="authorId != null and authorId != ''">
-          and user.id_ = #{authorId}
+        <if test="associationId != null and associationId != ''">
+          and info.id_ = #{associationId}
         </if>
       </where>
     </if>
@@ -245,15 +260,15 @@
     </if>
   </select>
   <select id="countByQuery" parameterType="com.sm.vo.NoticeQuery" resultType="java.lang.Long">
-    select count(*) from notice, user
+    select count(*) from notice, info
     <if test="_parameter != null">
       <where>
-        notice.author_id_ = user.id_
+        notice.association_id_ = info.id_
         <if test="title != null and title != ''">
           and title_ like concat('%', #{title}, '%')
         </if>
-        <if test="authorId != null and authorId != ''">
-          and user.id_ = #{authorId}
+        <if test="associationId != null and associationId != ''">
+          and info.id_ = #{associationId}
         </if>
       </where>
     </if>

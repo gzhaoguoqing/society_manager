@@ -1,7 +1,9 @@
 package com.sm.bo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.github.pagehelper.util.StringUtil;
 import com.sm.po.Activity;
+import com.sm.service.InfoService;
 import com.sm.service.UserService;
 import com.sm.util.StringUtils;
 import com.sm.vo.Applicant;
@@ -26,6 +28,8 @@ public class ActivityBO {
 
     private Integer applyUp;
 
+    private InfoBO association;
+
     @JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd HH:mm:ss")
     private Date applyStartTime;
 
@@ -38,8 +42,8 @@ public class ActivityBO {
 
     }
 
-    public ActivityBO(Activity activity, UserService userService) {
-        parse(activity, userService);
+    public ActivityBO(Activity activity, UserService userService, InfoService infoService) {
+        parse(activity, userService, infoService);
     }
 
     public String getId() {
@@ -122,7 +126,15 @@ public class ActivityBO {
         this.labels = labels;
     }
 
-    public void parse(Activity activity, UserService userService) {
+    public InfoBO getAssociation() {
+        return association;
+    }
+
+    public void setAssociation(InfoBO association) {
+        this.association = association;
+    }
+
+    public void parse(Activity activity, UserService userService, InfoService infoService) {
         if (activity == null) {
             return;
         }
@@ -148,6 +160,9 @@ public class ActivityBO {
         }
         if (StringUtils.isNotBlank(activity.getLabels())) {
             this.labels = activity.getLabels().split(",");
+        }
+        if (StringUtil.isNotEmpty(activity.getAssociationId())) {
+            this.association = infoService.getById(activity.getAssociationId(), false);
         }
     }
 }

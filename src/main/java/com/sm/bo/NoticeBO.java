@@ -1,8 +1,10 @@
 package com.sm.bo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.github.pagehelper.util.StringUtil;
 import com.sm.po.News;
 import com.sm.po.Notice;
+import com.sm.service.InfoService;
 import com.sm.service.UserService;
 import com.sm.util.StringUtils;
 import org.springframework.beans.BeanUtils;
@@ -23,12 +25,14 @@ public class NoticeBO {
 
     private String[] filePaths;
 
+    private InfoBO association;
+
     public NoticeBO() {
 
     }
 
-    public NoticeBO(Notice notice, UserService userService) {
-        parse(notice, userService);
+    public NoticeBO(Notice notice, UserService userService, InfoService infoService) {
+        parse(notice, userService, infoService);
     }
 
     public String getId() {
@@ -79,7 +83,15 @@ public class NoticeBO {
         this.filePaths = filePaths;
     }
 
-    public void parse(Notice notice, UserService userService) {
+    public InfoBO getAssociation() {
+        return association;
+    }
+
+    public void setAssociation(InfoBO association) {
+        this.association = association;
+    }
+
+    public void parse(Notice notice, UserService userService, InfoService infoService) {
         if (notice == null) {
             return;
         }
@@ -87,6 +99,9 @@ public class NoticeBO {
         this.author = userService.getById(notice.getAuthorId());
         if (notice.getFilePaths() != null && StringUtils.isNotBlank(notice.getFilePaths())) {
             this.filePaths = notice.getFilePaths().split(",");
+        }
+        if (StringUtil.isNotEmpty(notice.getAssociationId())) {
+            this.association = infoService.getById(notice.getAssociationId(), false);
         }
     }
 }

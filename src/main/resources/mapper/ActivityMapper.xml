@@ -12,6 +12,7 @@
     <result column="apply_start_time_" jdbcType="TIMESTAMP" property="applyStartTime" />
     <result column="apply_end_time_" jdbcType="TIMESTAMP" property="applyEndTime" />
     <result column="labels_" jdbcType="VARCHAR" property="labels" />
+    <result column="association_id_" jdbcType="VARCHAR" property="associationId" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -72,8 +73,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id_, title_, content_, author_id_, file_paths_, participantors_, apply_up_, apply_start_time_, 
-    apply_end_time_, labels_
+    id_, title_, content_, author_id_, file_paths_, participantors_, apply_up_, apply_start_time_,
+    apply_end_time_, labels_, association_id_
   </sql>
   <select id="selectByExample" parameterType="com.sm.client.ActivityExample" resultMap="BaseResultMap">
     select
@@ -90,7 +91,7 @@
     </if>
   </select>
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
-    select 
+    select
     <include refid="Base_Column_List" />
     from activity
     where id_ = #{id,jdbcType=VARCHAR}
@@ -106,14 +107,14 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.sm.po.Activity">
-    insert into activity (id_, title_, content_, 
-      author_id_, file_paths_, participantors_, 
-      apply_up_, apply_start_time_, apply_end_time_, 
-      labels_)
-    values (#{id,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR}, #{content,jdbcType=VARCHAR}, 
-      #{authorId,jdbcType=VARCHAR}, #{filePaths,jdbcType=VARCHAR}, #{participantors,jdbcType=VARCHAR}, 
-      #{applyUp,jdbcType=INTEGER}, #{applyStartTime,jdbcType=TIMESTAMP}, #{applyEndTime,jdbcType=TIMESTAMP}, 
-      #{labels,jdbcType=VARCHAR})
+    insert into activity (id_, title_, content_,
+      author_id_, file_paths_, participantors_,
+      apply_up_, apply_start_time_, apply_end_time_,
+      labels_, association_id_)
+    values (#{id,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR}, #{content,jdbcType=VARCHAR},
+      #{authorId,jdbcType=VARCHAR}, #{filePaths,jdbcType=VARCHAR}, #{participantors,jdbcType=VARCHAR},
+      #{applyUp,jdbcType=INTEGER}, #{applyStartTime,jdbcType=TIMESTAMP}, #{applyEndTime,jdbcType=TIMESTAMP},
+      #{labels,jdbcType=VARCHAR}, #{associationId,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.sm.po.Activity">
     insert into activity
@@ -148,6 +149,9 @@
       <if test="labels != null">
         labels_,
       </if>
+      <if test="associationId != null">
+        association_id_,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -179,6 +183,9 @@
       </if>
       <if test="labels != null">
         #{labels,jdbcType=VARCHAR},
+      </if>
+      <if test="associationId != null">
+        #{associationId,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -221,6 +228,9 @@
       <if test="record.labels != null">
         labels_ = #{record.labels,jdbcType=VARCHAR},
       </if>
+      <if test="record.associationId != null">
+        association_id_ = #{record.associationId,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -229,15 +239,16 @@
   <update id="updateByExample" parameterType="map">
     update activity
     set id_ = #{record.id,jdbcType=VARCHAR},
-      title_ = #{record.title,jdbcType=VARCHAR},
-      content_ = #{record.content,jdbcType=VARCHAR},
-      author_id_ = #{record.authorId,jdbcType=VARCHAR},
-      file_paths_ = #{record.filePaths,jdbcType=VARCHAR},
-      participantors_ = #{record.participantors,jdbcType=VARCHAR},
-      apply_up_ = #{record.applyUp,jdbcType=INTEGER},
-      apply_start_time_ = #{record.applyStartTime,jdbcType=TIMESTAMP},
-      apply_end_time_ = #{record.applyEndTime,jdbcType=TIMESTAMP},
-      labels_ = #{record.labels,jdbcType=VARCHAR}
+    title_ = #{record.title,jdbcType=VARCHAR},
+    content_ = #{record.content,jdbcType=VARCHAR},
+    author_id_ = #{record.authorId,jdbcType=VARCHAR},
+    file_paths_ = #{record.filePaths,jdbcType=VARCHAR},
+    participantors_ = #{record.participantors,jdbcType=VARCHAR},
+    apply_up_ = #{record.applyUp,jdbcType=INTEGER},
+    apply_start_time_ = #{record.applyStartTime,jdbcType=TIMESTAMP},
+    apply_end_time_ = #{record.applyEndTime,jdbcType=TIMESTAMP},
+    labels_ = #{record.labels,jdbcType=VARCHAR},
+    association_id_ = #{record.associationId,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -272,6 +283,9 @@
       <if test="labels != null">
         labels_ = #{labels,jdbcType=VARCHAR},
       </if>
+      <if test="associationId != null">
+        association_id_ = #{associationId,jdbcType=VARCHAR},
+      </if>
     </set>
     where id_ = #{id,jdbcType=VARCHAR}
   </update>
@@ -285,7 +299,34 @@
       apply_up_ = #{applyUp,jdbcType=INTEGER},
       apply_start_time_ = #{applyStartTime,jdbcType=TIMESTAMP},
       apply_end_time_ = #{applyEndTime,jdbcType=TIMESTAMP},
-      labels_ = #{labels,jdbcType=VARCHAR}
+      labels_ = #{labels,jdbcType=VARCHAR},
+      association_id_ = #{associationId,jdbcType=VARCHAR}
     where id_ = #{id,jdbcType=VARCHAR}
   </update>
+  <select id="selectByQuery" parameterType="com.sm.vo.ActivityQuery" resultMap="BaseResultMap">
+    select
+      activity.id_, title_, content_, author_id_, file_paths_, participantors_, apply_up_, apply_start_time_, apply_end_time_, labels_, association_id_
+    from activity left join info
+    on activity.association_id_ = info.id_
+    <if test="_parameter != null">
+      <where>
+        <if test="associationId != null and associationId != ''">
+          and info.id_ = #{associationId}
+        </if>
+      </where>
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="countByQuery" parameterType="com.sm.vo.ActivityQuery" resultType="java.lang.Long">
+    select count(*) from activity, info
+    <if test="_parameter != null">
+      <where>
+        <if test="associationId != null and associationId != ''">
+          and info.id_ = #{associationId}
+        </if>
+      </where>
+    </if>
+  </select>
 </mapper>

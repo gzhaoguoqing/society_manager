@@ -6,6 +6,7 @@ import com.sm.po.Activity;
 import com.sm.service.ActivityService;
 import com.sm.util.StringUtils;
 import com.sm.util.Utils;
+import com.sm.vo.ActivityQuery;
 import com.sm.vo.Applicant;
 import com.sm.vo.QueryEntry;
 import com.sm.vo.ResultEntry;
@@ -28,9 +29,9 @@ public class ActivityController {
     private ActivityService activityService;
 
     @GetMapping
-    public ResultEntry<List<ActivityBO>> list(QueryEntry qry) {
+    public ResultEntry<List<ActivityBO>> list(ActivityQuery qry) {
         ResultEntry<List<ActivityBO>> result = new ResultEntry<>();
-        result.setTotal(activityService.getCount());
+        result.setTotal(activityService.getCount(qry));
         result.setData(activityService.getByPage(qry));
         return result;
     }
@@ -47,6 +48,9 @@ public class ActivityController {
         UserBO loginedUser = (UserBO) SecurityUtils.getSubject().getPrincipal();
         activity.setAuthorId(loginedUser.getId());
         activity.setId(Utils.getUUID());
+        if (loginedUser.getAssociations() != null && loginedUser.getAssociations().size() > 0) {
+            activity.setAssociationId(loginedUser.getAssociations().get(0).getId());
+        }
         activityService.add(activity);
         return new ResultEntry();
     }
