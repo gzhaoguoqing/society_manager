@@ -1,6 +1,7 @@
 package com.sm.controller;
 
 import com.github.pagehelper.util.StringUtil;
+import com.sm.bo.InfoBO;
 import com.sm.bo.UserBO;
 import com.sm.po.Info;
 import com.sm.po.User;
@@ -71,6 +72,13 @@ public class UserController {
             user.setPassword(Utils.md5(user.getPassword()));
         }
         if (StringUtils.isNotBlank(user.getRoleId()) && StringUtils.isNotBlank(user.getAssociationIds())) {
+            UserBO userBO = userService.getById(user.getId());
+            if (userBO.getRole().getId().equals("bcd14ce4680942dc83acd9d42d4ead76")) {
+                Info info = new Info();
+                info.setId(userBO.getAssociations().get(0).getId());
+                info.setCharityId("");
+                infoService.updateById(info);
+            }
             if (user.getRoleId().equals("bcd14ce4680942dc83acd9d42d4ead76")) {
                 Info info = new Info();
                 info.setId(user.getAssociationIds());
@@ -112,7 +120,12 @@ public class UserController {
             record.add(user.getContactWay());
             record.add(user.getRole().getName());
             if (infoId == null) {
-                record.add(user.getAssociations().size()>0 ? user.getAssociations().get(0).getName() : "");
+                List<InfoBO> associations = user.getAssociations();
+                List<String> associationIds = new ArrayList<>();
+                for (InfoBO infoBO : associations) {
+                    associationIds.add(infoBO.getName());
+                }
+                record.add(StringUtils.join(associationIds, ","));
             }
             csvPrinter.printRecord(record);
         }
