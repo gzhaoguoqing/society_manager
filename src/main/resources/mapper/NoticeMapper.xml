@@ -242,7 +242,7 @@
   </update>
   <select id="selectByQuery" parameterType="com.sm.vo.NoticeQuery" resultMap="BaseResultMap">
     select
-      info.id_ id_, title_, content_, date_, author_id_, file_paths_, association_id_
+      notice.id_ id_, title_, content_, date_, author_id_, file_paths_, association_id_
     from notice left join info
       on notice.association_id_ = info.id_
     <if test="_parameter != null">

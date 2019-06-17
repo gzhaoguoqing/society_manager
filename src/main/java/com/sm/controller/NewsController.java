@@ -16,6 +16,7 @@ import javax.annotation.Resource;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -60,6 +61,7 @@ public class NewsController {
         news.setId(Utils.getUUID());
         news.setAuthorId(loginedUser.getId());
         news.setClicks(0);
+        news.setDate(new Date());
         newsService.add(news);
         return new ResultEntry();
     }

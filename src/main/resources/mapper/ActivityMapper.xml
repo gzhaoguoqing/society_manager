@@ -305,7 +305,7 @@
   </update>
   <select id="selectByQuery" parameterType="com.sm.vo.ActivityQuery" resultMap="BaseResultMap">
     select
-      activity.id_, title_, content_, author_id_, file_paths_, participantors_, apply_up_, apply_start_time_, apply_end_time_, labels_, association_id_
+      activity.id_ id_, title_, content_, author_id_, file_paths_, participantors_, apply_up_, apply_start_time_, apply_end_time_, labels_, association_id_
     from activity left join info
     on activity.association_id_ = info.id_
     <if test="_parameter != null">

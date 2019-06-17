@@ -108,12 +108,14 @@ public class UserController {
         if (!file.getParentFile().exists()) {
             file.getParentFile().mkdirs();
         }
-        FileWriter fileWriter = new FileWriter(file);
-        CSVPrinter csvPrinter = new CSVPrinter(fileWriter, csvFormat);
+        FileOutputStream fos = new FileOutputStream(file);
+        fos.write(new byte[]{(byte)0xEF, (byte)0xBB, (byte)0xBF});
+        OutputStreamWriter osWriter = new OutputStreamWriter(fos);
+        CSVPrinter csvPrinter = new CSVPrinter(osWriter, csvFormat);
         List<UserBO> users = userService.getByPage(null, infoId);
         for (UserBO user : users) {
             ArrayList<String> record = new ArrayList<>();
-            record.add(user.getNumber());
+            record.add(user.getNumber() + "\t");
             record.add(user.getName());
             record.add(user.getSex()==0 ? "男" : "女");
             record.add(user.getClasses());
@@ -130,7 +132,7 @@ public class UserController {
             csvPrinter.printRecord(record);
         }
         csvPrinter.flush();
-        fileWriter.close();
+        osWriter.close();
         csvPrinter.close();
 
         response.setHeader("Content-Disposition","attachment;filename=" + URLEncoder.encode(file.getName(), "utf-8"));
